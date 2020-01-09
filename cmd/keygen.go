@@ -1,22 +1,8 @@
-/*
-Copyright © 2020 NAME HERE <EMAIL ADDRESS>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
 package cmd
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/spf13/cobra"
 )
@@ -24,28 +10,31 @@ import (
 // keygenCmd represents the keygen command
 var keygenCmd = &cobra.Command{
 	Use:   "keygen",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Create an RSA keypair",
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("keygen called")
+
+		// Keysize should be some power of two >= 1024
+		keysize, err := cmd.Flags().GetInt("size")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Output is private key output file. Public key appends ".pub"
+		output, err := cmd.Flags().GetString("output")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Create and save keys
+		kg := keys.NewKeyGenerator
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(keygenCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// keygenCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// keygenCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	keygenCmd.Flags().StringP("output", "o", "id_rsa", "Output to file")
+	keygenCmd.Flags().IntP("size", "s", 2048, "Key size")
 }
