@@ -19,7 +19,7 @@ func PublicKeyFromFile(path string) *rsa.PublicKey {
 
 	// Decode PEM
 	pubPem, _ := pem.Decode(pemData)
-	if pubPem == nil || pubPem.Type != "RSA PUBLIC KEY" {
+	if pubPem == nil || pubPem.Type != "PUBLIC KEY" {
 		log.Fatal("Failed to decode PEM containing public key. Type: ", pubPem.Type)
 	}
 
