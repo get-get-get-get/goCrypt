@@ -29,8 +29,8 @@ func (kg KeyGenerator) Save() {
 	pub := &key.PublicKey
 
 	// Save keys
-	savePEMKey(kg.KeyFile, key)
-	savePEMPubKey(kg.PublicKeyFile, pub)
+	savePrivateKey(kg.KeyFile, key)
+	savePublicKey(kg.PublicKeyFile, pub)
 }
 
 // NewKeyGenerator creates new KeyGenerator
@@ -67,7 +67,7 @@ func isValidKeySize(n int) bool {
 	return false
 }
 
-func savePEMKey(path string, key *rsa.PrivateKey) {
+func savePrivateKey(path string, key *rsa.PrivateKey) {
 
 	// Format key as PEM
 	var privatePem = &pem.Block{
@@ -89,7 +89,7 @@ func savePEMKey(path string, key *rsa.PrivateKey) {
 	}
 }
 
-func savePEMPubKey(path string, pubkey *rsa.PublicKey) {
+func savePublicKey(path string, pubkey *rsa.PublicKey) {
 	// Not sure
 	asn1Bytes, err := x509.MarshalPKIXPublicKey(pubkey)
 	if err != nil {
