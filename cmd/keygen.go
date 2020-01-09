@@ -31,7 +31,9 @@ var keygenCmd = &cobra.Command{
 		// Create and save keys
 		kg := keys.NewKeyGenerator(output, keysize)
 		kg.Save()
-		fmt.Println("Created keypair at", kg.KeyFile)
+		fmt.Println("RSA keypair created!")
+		fmt.Println("Private key:", kg.KeyFile)
+		fmt.Println("Public key:", kg.PublicKeyFile)
 
 	},
 }
