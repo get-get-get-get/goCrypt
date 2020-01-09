@@ -69,10 +69,13 @@ func isValidKeySize(n int) bool {
 
 func savePrivateKey(path string, key *rsa.PrivateKey) {
 
+	// Not sure
+	pkcs1Bytes := x509.MarshalPKCS1PrivateKey(key)
+
 	// Format key as PEM
 	var privatePem = &pem.Block{
-		Type:  "PRIVATE KEY",
-		Bytes: x509.MarshalPKCS1PrivateKey(key),
+		Type:  "RSA PRIVATE KEY",
+		Bytes: pkcs1Bytes,
 	}
 
 	// Open file safely
@@ -91,15 +94,15 @@ func savePrivateKey(path string, key *rsa.PrivateKey) {
 
 func savePublicKey(path string, pubkey *rsa.PublicKey) {
 	// Not sure
-	asn1Bytes, err := x509.MarshalPKIXPublicKey(pubkey)
+	pkixBytes, err := x509.MarshalPKIXPublicKey(pubkey)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Format as PEM
 	var publicPem = &pem.Block{
-		Type:  "PUBLIC KEY",
-		Bytes: asn1Bytes,
+		Type:  "RSA PUBLIC KEY",
+		Bytes: pkixBytes,
 	}
 
 	// Open file safely
