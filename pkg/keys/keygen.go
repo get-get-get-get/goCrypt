@@ -12,9 +12,9 @@ import (
 
 // KeyGenerator assists in key generation
 type KeyGenerator struct {
-	privKeyPath string
-	pubKeyPath  string
-	keySize     int
+	KeyFile       string
+	PublicKeyFile string
+	KeySize       int
 }
 
 // Save creates an RSA keypair and saves to file
@@ -22,15 +22,15 @@ func (kg KeyGenerator) Save() {
 	reader := rand.Reader
 
 	// Generate keypair
-	key, err := rsa.GenerateKey(reader, kg.keySize)
+	key, err := rsa.GenerateKey(reader, kg.KeySize)
 	if err != nil {
 		log.Fatal(err)
 	}
 	pub := &key.PublicKey
 
 	// Save keys
-	savePEMKey(kg.privKeyPath, key)
-	savePEMPubKey(kg.pubKeyPath, pub)
+	savePEMKey(kg.KeyFile, key)
+	savePEMPubKey(kg.PublicKeyFile, pub)
 }
 
 // NewKeyGenerator creates new KeyGenerator
@@ -41,7 +41,7 @@ func NewKeyGenerator(basepath string, keysize int) *KeyGenerator {
 	if !isValidKeySize(keysize) {
 		return nil
 	}
-	kg.keySize = keysize
+	kg.KeySize = keysize
 
 	// Normalize path
 	priv, err := filepath.Abs(basepath)
@@ -49,8 +49,8 @@ func NewKeyGenerator(basepath string, keysize int) *KeyGenerator {
 		log.Fatal(err)
 	}
 	pub := filepath.Join(priv, ".pub")
-	kg.privKeyPath = priv
-	kg.pubKeyPath = pub
+	kg.KeyFile = priv
+	kg.PublicKeyFile = pub
 
 	return kg
 }

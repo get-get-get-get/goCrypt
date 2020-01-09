@@ -31,7 +31,7 @@ var keygenCmd = &cobra.Command{
 		// Create and save keys
 		kg := keys.NewKeyGenerator(output, keysize)
 		kg.Save()
-		fmt.Println("Created keypair at", kg.privKeyPath)
+		fmt.Println("Created keypair at", kg.KeyFile)
 
 	},
 }
