@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/get-get-get-get/goCrypt/pkg/keys"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +29,10 @@ var keygenCmd = &cobra.Command{
 		}
 
 		// Create and save keys
-		kg := keys.NewKeyGenerator
+		kg := keys.NewKeyGenerator(output, keysize)
+		kg.Save()
+		fmt.Println("Created keypair at", kg.privKeyPath)
+
 	},
 }
 
