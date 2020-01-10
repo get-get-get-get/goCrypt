@@ -19,8 +19,8 @@ func PublicKeyFromFile(path string) *rsa.PublicKey {
 
 	// Decode PEM
 	pubPem, _ := pem.Decode(pemData)
-	if pubPem == nil || pubPem.Type != "PUBLIC KEY" {
-		log.Fatal("Failed to decode PEM containing public key. Type: ", pubPem.Type)
+	if pubPem == nil || pubPem.Type != "RSA PUBLIC KEY" {
+		log.Fatal("Failed to decode PEM containing public key.")
 	}
 
 	// Decode x509
@@ -33,4 +33,26 @@ func PublicKeyFromFile(path string) *rsa.PublicKey {
 	pubKey, _ = pubX509.(*rsa.PublicKey)
 
 	return pubKey
+}
+
+func PrivateKeyFromFile(path string) *rsa.PrivateKey {
+
+	// Read key from file
+	pemData, err := ioutil.ReadFile(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Decode PEM
+	privPem, _ := pem.Decode(pemData)
+	if privPem == nil || privPem.Type != "RSA PRIVATE KEY" {
+		log.Fatal("Failed to decode PEM containing private key.")
+	}
+
+	key, err := x509.ParsePKCS1PrivateKey(privPem.Bytes)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return key
 }
