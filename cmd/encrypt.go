@@ -2,7 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
+	"log"
+	"path/filepath"
 
+	"github.com/get-get-get-get/goCrypt/pkg/encrypt"
+	"github.com/get-get-get-get/goCrypt/pkg/keys"
 	"github.com/spf13/cobra"
 )
 
@@ -10,27 +15,56 @@ import (
 var encryptCmd = &cobra.Command{
 	Use:   "encrypt",
 	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("encrypt called")
+
+		// Path to file to be encrypted
+		file, err := filepath.Abs(args[0])
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("Encrypting file:", file)
+
+		// Output path
+		o, err := cmd.Flags().GetString("output")
+		if err != nil {
+			log.Fatal(err)
+		}
+		// If no output given, encrypt the file in place
+		if o == "" {
+			o = file
+		}
+		out, err := filepath.Abs(o)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Public key
+		p, err := cmd.Flags().GetString("pubkey")
+		if err != nil {
+			log.Fatal(err)
+		}
+		pub := keys.PublicKeyFromFile(p)
+		fmt.Println("Read public key! Size: ", pub.Size())
+
+		// Encrypt data
+		enc, err := encrypt.RSAEncryptFile(file, pub)
+		if err != nil {
+			log.Fatal(err)
+		}
+		// Save encrypted data
+		if err := ioutil.WriteFile(out, enc, 0640); err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("File Encrypted!")
+
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(encryptCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// encryptCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// encryptCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	encryptCmd.Flags().StringP("pubkey", "p", "", "Path to public key")
+	encryptCmd.Flags().StringP("output", "o", "", "Output encrypted content as")
 }
