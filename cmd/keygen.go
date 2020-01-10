@@ -41,6 +41,6 @@ var keygenCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(keygenCmd)
 
-	keygenCmd.Flags().StringP("output", "o", "id_rsa", "Output to file")
+	keygenCmd.Flags().StringP("output", "o", "rsa", "Output to file")
 	keygenCmd.Flags().IntP("size", "s", 2048, "Key size")
 }
