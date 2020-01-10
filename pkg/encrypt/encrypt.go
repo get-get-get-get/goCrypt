@@ -24,3 +24,21 @@ func RSAEncryptFile(path string, pub *rsa.PublicKey) ([]byte, error) {
 
 	return enc, nil
 }
+
+// RSADecryptFile decrypts file with RSA private key (probably not secure)
+func RSADecryptFile(path string, key *rsa.PrivateKey) ([]byte, error) {
+
+	// Read file to be decrypted
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	// Decrypt
+	dec, err := rsa.DecryptOAEP(sha256.New(), rand.Reader, key, data, []byte(""))
+	if err != nil {
+		return nil, err
+	}
+
+	return dec, nil
+}
