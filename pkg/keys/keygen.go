@@ -44,11 +44,12 @@ func NewKeyGenerator(basepath string, keysize int) *KeyGenerator {
 	kg.KeySize = keysize
 
 	// Normalize path
-	priv, err := filepath.Abs(basepath)
+	abspath, err := filepath.Abs(basepath)
 	if err != nil {
 		log.Fatal(err)
 	}
-	pub := priv + ".pub"
+	priv := abspath + ".key"
+	pub := abspath + ".pub"
 	kg.KeyFile = priv
 	kg.PublicKeyFile = pub
 
