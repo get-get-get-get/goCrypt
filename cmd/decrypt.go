@@ -69,6 +69,6 @@ to quickly create a Cobra application.`,
 func init() {
 	rootCmd.AddCommand(decryptCmd)
 
-	encryptCmd.Flags().StringP("key", "k", "", "Path to private key")
-	encryptCmd.Flags().StringP("output", "o", "", "Output decrypted content as")
+	decryptCmd.Flags().StringP("key", "k", "", "Path to private key")
+	decryptCmd.Flags().StringP("output", "o", "", "Output decrypted content as")
 }
