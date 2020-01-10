@@ -14,7 +14,7 @@ import (
 // encryptCmd represents the encrypt command
 var encryptCmd = &cobra.Command{
 	Use:   "encrypt",
-	Short: "A brief description of your command",
+	Short: "Encrypt a file using RSA public key",
 
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("encrypt called")
