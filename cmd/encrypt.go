@@ -54,7 +54,7 @@ var encryptCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 		// Save encrypted data
-		if err := ioutil.WriteFile(out, enc, 0640); err != nil {
+		if err := ioutil.WriteFile(out, enc, 0644); err != nil {
 			log.Fatal(err)
 		}
 		fmt.Println("File Encrypted!")
